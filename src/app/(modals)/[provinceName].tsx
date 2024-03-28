@@ -31,29 +31,31 @@ const CreatureModal = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-white m-5 rounded-lg">
-      <View className="flex flex-row items-center justify-center p-1">
-        <Text className="text-2xl">{provinceName}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            router.back();
-          }}
-          className="absolute top-[10px] right-4"
-        >
-          <Ionicons name="close" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <View className="flex-1 bg-white mx-5">
+        <View className="flex flex-row items-center justify-center p-1">
+          <Text className="text-2xl">{provinceName}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              router.back();
+            }}
+            className="absolute top-[10px] right-4"
+          >
+            <Ionicons name="close" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
 
-      {Object.keys(creatureList).length !== 0 ? (
-        <>
-          <CreatureTypeProvider>
-            <ImageList creatureList={creatureList} />
-            <ToggleButton />
-          </CreatureTypeProvider>
-        </>
-      ) : (
-        <Loader />
-      )}
+        {Object.keys(creatureList).length !== 0 ? (
+          <>
+            <CreatureTypeProvider>
+              <ImageList creatureList={creatureList} />
+              <ToggleButton />
+            </CreatureTypeProvider>
+          </>
+        ) : (
+          <Loader />
+        )}
+      </View>
     </SafeAreaView>
   );
 };

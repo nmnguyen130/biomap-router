@@ -17,5 +17,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 
-const db = getFirestore(app);
+export const db = getFirestore(app);
 export const provinceRef = collection(db, "Provinces");

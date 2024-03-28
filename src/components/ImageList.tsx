@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
-import { DocumentData } from "firebase/firestore";
+import { DocumentData, doc, getDoc } from "firebase/firestore";
+import { getDownloadURL, ref } from "firebase/storage";
 
-import { useCreatureType } from "@/hooks/CreatureTypeContext";
 import Loader from "./Loader";
+import { useCreatureType } from "@/hooks/CreatureTypeContext";
+import { getURLFromCache, saveURLToCache } from "@/utils/Storage";
+import { db, storage } from "@/utils/firebase";
 
 interface Props {
   creatureList: DocumentData;
@@ -20,6 +23,67 @@ const ImageList: React.FC<Props> = ({ creatureList }) => {
     animalList: [],
     plantList: [],
   });
+
+  const fetchCreatureData = async (creatureList: string[], table: string) => {
+    return Promise.all(
+      creatureList.map(async (data: string) => {
+        const cachedImageURL = await getURLFromCache(`URL_${data}`);
+
+        if (cachedImageURL) {
+          // If the imageURL is cached, use it directly
+          return cachedImageURL;
+        } else {
+          const creatureRef = doc(db, table, data);
+          const snapshot = await getDoc(creatureRef);
+          const creatureData = snapshot.data();
+
+          if (creatureData) {
+            const imageRef = ref(storage, `${creatureData.image_url}`);
+            const imageUrl = await getDownloadURL(imageRef);
+
+            // Cache the URL in AsyncStorage
+            saveURLToCache(
+              `URL_${data}`,
+              JSON.stringify({
+                id: data,
+                name: creatureData.name,
+                imageURL: imageUrl,
+              })
+            );
+
+            return {
+              id: data,
+              name: creatureData.name,
+              imageURL: imageUrl,
+            };
+          }
+        }
+        return {
+          id: "",
+          name: "",
+          imageURL: "",
+        };
+      })
+    ).then((data) => data.filter(Boolean));
+  };
+
+  const getCreatureCard = useMemo(() => {
+    return async () => {
+      const { animal_list, plant_list } = creatureList;
+
+      const animalData = await fetchCreatureData(animal_list, "Animals");
+      const plantData = await fetchCreatureData(plant_list, "Plants");
+
+      setCreatureDatas({
+        animalList: animalData,
+        plantList: plantData,
+      });
+    };
+  }, [creatureList]);
+
+  useEffect(() => {
+    getCreatureCard();
+  }, [getCreatureCard]);
 
   const getSelectedCreatureData = () => {
     return selectedType === "animal"
