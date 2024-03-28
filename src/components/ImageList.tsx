@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { DocumentData, doc, getDoc } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
+import { router } from "expo-router";
 
 import Loader from "./Loader";
 import { useCreatureType } from "@/hooks/CreatureTypeContext";
@@ -11,9 +12,10 @@ import { db, storage } from "@/utils/firebase";
 
 interface Props {
   creatureList: DocumentData;
+  provinceName?: string;
 }
 
-const ImageList: React.FC<Props> = ({ creatureList }) => {
+const ImageList: React.FC<Props> = ({ creatureList, provinceName }) => {
   const { selectedType } = useCreatureType();
 
   const [creatureDatas, setCreatureDatas] = useState<{
@@ -99,7 +101,16 @@ const ImageList: React.FC<Props> = ({ creatureList }) => {
           renderItem={({ item }) => (
             <TouchableOpacity
               className="mx-4 my-[10px] pb-[10px] rounded-md items-center bg-primary"
-              onPress={() => {}}
+              onPress={() => {
+                router.push({
+                  pathname: "(data)/[creatureName]",
+                  params: {
+                    creatureName: item.id,
+                    type: selectedType === "animal" ? "Animals" : "Plants",
+                    provinceName: provinceName,
+                  },
+                });
+              }}
             >
               <Image
                 source={{ uri: item.imageURL }}

@@ -48,7 +48,10 @@ const CreatureModal = () => {
         {Object.keys(creatureList).length !== 0 ? (
           <>
             <CreatureTypeProvider>
-              <ImageList creatureList={creatureList} />
+              <ImageList
+                creatureList={creatureList}
+                provinceName={provinceName}
+              />
               <ToggleButton />
             </CreatureTypeProvider>
           </>
