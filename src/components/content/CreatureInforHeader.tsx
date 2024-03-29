@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
-import { DocumentData } from "firebase/firestore";
+import { DocumentData } from "@firebase/firestore";
 
 interface Props {
   creatureData: DocumentData;

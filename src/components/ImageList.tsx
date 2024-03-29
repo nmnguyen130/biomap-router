@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
-import { DocumentData, doc, getDoc } from "firebase/firestore";
-import { getDownloadURL, ref } from "firebase/storage";
+import { DocumentData, doc, getDoc } from "@firebase/firestore";
+import { getDownloadURL, ref } from "@firebase/storage";
 import { router } from "expo-router";
 
 import Loader from "./Loader";

@@ -7,6 +7,8 @@ import CreatureInforHeader from "@/components/content/CreatureInforHeader";
 import CreatureInforBody from "@/components/content/CreatureInforBody";
 import { db } from "@/utils/firebase";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getURLFromCache } from "@/utils/Storage";
+import Loader from "@/components/Loader";
 
 const CreatureInformation = () => {
   const { creatureName, type, provinceName } = useLocalSearchParams<{
@@ -31,6 +33,12 @@ const CreatureInformation = () => {
         console.warn("Creature data not found for:", creatureName);
       } else {
         const id = creatureName;
+
+        const cacheImageURL = await getURLFromCache(`URL_${creatureName}`);
+        if (cacheImageURL) {
+          creatureData.image_url = cacheImageURL.imageURL;
+        }
+
         setCreatureInfor({ ...creatureData, id });
       }
     } catch (error) {
@@ -44,13 +52,17 @@ const CreatureInformation = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View className="flex-1 p-[10px]">
-        <CreatureInforHeader
-          creatureData={creatureInfor}
-          provinceName={provinceName}
-        />
-        <CreatureInforBody creatureData={creatureInfor} />
-      </View>
+      {Object.keys(creatureInfor).length > 0 ? (
+        <View className="flex-1 p-[10px]">
+          <CreatureInforHeader
+            creatureData={creatureInfor}
+            provinceName={provinceName}
+          />
+          <CreatureInforBody creatureData={creatureInfor} />
+        </View>
+      ) : (
+        <Loader />
+      )}
     </SafeAreaView>
   );
 };

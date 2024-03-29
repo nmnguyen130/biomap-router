@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { DocumentData, getDocs, query, where } from "firebase/firestore";
+import { DocumentData, getDocs, query, where } from "@firebase/firestore";
 
 import { provinceRef } from "@/utils/firebase";
 import ImageList from "@/components/ImageList";
