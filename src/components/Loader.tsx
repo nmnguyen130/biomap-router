@@ -8,7 +8,7 @@ const Loader = () => {
   return (
     <View className="flex-1 justify-center items-center">
       <LottieView
-        style={{ width: 250, height: 250 }}
+        style={{ width: 500, height: 500 }}
         source={require("@assets/data/pawLoader.json")}
         autoPlay
         loop
