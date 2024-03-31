@@ -127,7 +127,7 @@ const ImageList: React.FC<Props> = ({ creatureList, provinceName }) => {
           )}
         />
       ) : (
-        <Loader />
+        <Loader width={450} height={450} />
       )}
     </View>
   );

@@ -75,9 +75,9 @@ export const AuthContextProvider: React.FC<{ children: ReactNode }> = ({
       return { success: true };
     } catch (error) {
       let msg = (error as Error).message;
-      if (msg.includes("(auth/invalid-email)")) msg = "Invalid Email!";
+      if (msg.includes("(auth/invalid-email)")) msg = "Email không hợp lệ!";
       if (msg.includes("(auth/invalid-credential)"))
-        msg = "Wrong Email or Password!";
+        msg = "Email hoặc mật khẩu không đúng!";
       return { success: false, msg: msg };
     }
   };
@@ -105,9 +105,9 @@ export const AuthContextProvider: React.FC<{ children: ReactNode }> = ({
       return { success: true, data: response?.user };
     } catch (error) {
       let msg = (error as Error).message;
-      if (msg.includes("(auth/invalid-email)")) msg = "Invalid Email!";
+      if (msg.includes("(auth/invalid-email)")) msg = "Email không hợp lệ!";
       if (msg.includes("(auth/email-already-in-use)"))
-        msg = "This email is already in use!";
+        msg = "Địa chỉ email đã được sử dụng!";
       return { success: false, msg: msg };
     }
   };

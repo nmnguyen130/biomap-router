@@ -1,18 +1,14 @@
-import { useRef } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { useRef, useState } from "react";
+import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useAuth } from "@/hooks/AuthContext";
+import Input from "@/components/Input";
 
 const LoginScreen = () => {
+  const [isShow, setIsShow] = useState(false);
+
   const { login } = useAuth();
 
   const emailRef = useRef("");
@@ -20,13 +16,14 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     if (!emailRef.current || !passwordRef.current) {
-      Alert.alert("Login", "Please fill all the fields!");
+      Alert.alert("Đăng nhập", "Vui lòng điền đầy đủ thông tin!");
       return;
     }
 
     const response = await login(emailRef.current, passwordRef.current);
+
     if (!response.success) {
-      Alert.alert("Login failed!", response.msg);
+      Alert.alert("Đăng nhập thất bại!", response.msg);
     }
   };
 
@@ -37,34 +34,41 @@ const LoginScreen = () => {
           source={require("@assets/paws-logo.png")}
           className="w-[132px] h-1/6 my-4"
         />
-        <Text className="text-4xl font-bold text-lighter_primary ">
+        <Text className="text-4xl font-bold text-lighter_primary mb-10">
           Bio
           <Text className="text-4xl font-bold text-yellow-500">Map</Text>
         </Text>
 
-        <View className="w-full bg-gray-100 p-3 mt-[60px] mb-4 rounded-lg flex-row items-center">
-          <MaterialCommunityIcons name="email" size={22} color="#128F51" />
-          <TextInput
-            placeholder="Email"
-            className="ms-2 w-full"
-            onChangeText={(value) => (emailRef.current = value)}
-          />
-        </View>
+        <Input
+          leftIcon={
+            <MaterialCommunityIcons name="email" size={22} color="#128F51" />
+          }
+          placeholder="Email"
+          onChangeText={(value) => (emailRef.current = value)}
+        />
 
-        <View className="w-full bg-gray-100 p-3 mb-4 rounded-lg flex-row items-center">
-          <MaterialCommunityIcons name="lock" size={22} color="#128F51" />
-          <TextInput
-            placeholder="Mật khẩu"
-            className="ms-2 w-full"
-            onChangeText={(value) => (passwordRef.current = value)}
-            secureTextEntry
-          />
-
-          <TouchableOpacity className="absolute top-[13px] right-3">
-            {/* <Octicons name="eye" size={22} color="#128F51" /> */}
-            <Octicons name="eye-closed" size={22} color="#BDBDBD" />
-          </TouchableOpacity>
-        </View>
+        <Input
+          leftIcon={
+            <MaterialCommunityIcons name="lock" size={22} color="#128F51" />
+          }
+          placeholder="Mật khẩu"
+          onChangeText={(value) => (passwordRef.current = value)}
+          secureTextEntry={!isShow}
+          rightIcon={
+            <TouchableOpacity
+              className="absolute top-[13px] right-3"
+              onPress={() => {
+                setIsShow(!isShow);
+              }}
+            >
+              <Octicons
+                name={isShow ? "eye" : "eye-closed"}
+                size={22}
+                color="#BDBDBD"
+              />
+            </TouchableOpacity>
+          }
+        />
 
         <TouchableOpacity
           className="w-full bg-primary p-3 mt-[36px] mb-3 rounded-2xl items-center py-4"

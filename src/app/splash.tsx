@@ -5,7 +5,7 @@ import Loader from "@/components/Loader";
 const SplashScreen = () => {
   return (
     <View className="flex-1">
-      <Loader />
+      <Loader width={500} height={500} />
     </View>
   );
 };

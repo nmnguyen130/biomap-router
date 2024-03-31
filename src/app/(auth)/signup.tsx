@@ -1,18 +1,15 @@
-import { useRef } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { useRef, useState } from "react";
+import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useAuth } from "@/hooks/AuthContext";
+import Input from "@/components/Input";
 
 const SignupScreen = () => {
+  const [isShow, setIsShow] = useState(false);
+  const [isShowConfirm, setIsShowConfirm] = useState(false);
+
   const { register } = useAuth();
 
   const usernameRef = useRef("");
@@ -27,7 +24,7 @@ const SignupScreen = () => {
       !passwordRef.current ||
       !confirmPassRef.current
     ) {
-      Alert.alert("Sign Up", "Please fill all the fields!");
+      Alert.alert("Đăng ký", "Vui lòng điền đầy đủ thông tin!");
       return;
     }
 
@@ -38,7 +35,7 @@ const SignupScreen = () => {
     );
 
     if (!response.success) {
-      Alert.alert("Sign Up", response.msg);
+      Alert.alert("Đăng ký", response.msg);
     }
   };
 
@@ -51,65 +48,84 @@ const SignupScreen = () => {
           className="w-[132px] h-1/6 my-4"
         />
 
-        <Text className="text-4xl font-bold text-lighter_primary ">
+        <Text className="text-4xl font-bold text-lighter_primary mb-10">
           Bio
           <Text className="text-4xl font-bold text-yellow-500">Map</Text>
         </Text>
 
-        <View className="w-full bg-gray-100 p-3 mt-14 mb-4 rounded-lg flex-row items-center">
-          <MaterialCommunityIcons
-            name="account-outline"
-            size={24}
-            color="#128F51"
-          />
-          <TextInput
-            placeholder="Tên tài khoản"
-            className="w-full ms-2"
-            onChangeText={(value) => (usernameRef.current = value)}
-          />
-        </View>
+        <Input
+          leftIcon={
+            <MaterialCommunityIcons
+              name="account-outline"
+              size={24}
+              color="#128F51"
+            />
+          }
+          placeholder="Tên tài khoản"
+          onChangeText={(value) => (usernameRef.current = value)}
+        />
 
-        <View className="w-full bg-gray-100 p-3 mb-4 rounded-lg flex-row items-center">
-          <MaterialCommunityIcons
-            name="email-outline"
-            size={22}
-            color="#128F51"
-          />
-          <TextInput
-            placeholder="Email"
-            className="w-full ms-2"
-            onChangeText={(value) => (emailRef.current = value)}
-          />
-        </View>
+        <Input
+          leftIcon={
+            <MaterialCommunityIcons
+              name="email-outline"
+              size={22}
+              color="#128F51"
+            />
+          }
+          placeholder="Email"
+          onChangeText={(value) => (emailRef.current = value)}
+        />
 
-        <View className="w-full bg-gray-100 p-3 mb-4 rounded-lg flex-row items-center">
-          <MaterialCommunityIcons
-            name="lock-outline"
-            size={22}
-            color="#128F51"
-          />
-          <TextInput
-            placeholder="Mật khẩu"
-            className="w-full ms-2"
-            onChangeText={(value) => (passwordRef.current = value)}
-            secureTextEntry
-          />
+        <Input
+          leftIcon={
+            <MaterialCommunityIcons name="lock" size={22} color="#128F51" />
+          }
+          placeholder="Mật khẩu"
+          onChangeText={(value) => (passwordRef.current = value)}
+          secureTextEntry={!isShow}
+          rightIcon={
+            <TouchableOpacity
+              className="absolute top-[13px] right-3"
+              onPress={() => {
+                setIsShow(!isShow);
+              }}
+            >
+              <Octicons
+                name={isShow ? "eye" : "eye-closed"}
+                size={22}
+                color="#BDBDBD"
+              />
+            </TouchableOpacity>
+          }
+        />
 
-          <TouchableOpacity className="absolute top-[13px] right-3">
-            {/* <Octicons name="eye" size={24} color="#128F51" /> */}
-            <Octicons name="eye-closed" size={22} color="#BDBDBD" />
-          </TouchableOpacity>
-        </View>
-
-        <View className="w-full bg-gray-100 p-3 mb-4 rounded-lg flex-row items-center">
-          <MaterialCommunityIcons name="lock-check" size={22} color="#128F51" />
-          <TextInput
-            placeholder="Xác nhận mật khẩu"
-            className="w-full ms-2"
-            onChangeText={(value) => (confirmPassRef.current = value)}
-            secureTextEntry
-          />
-        </View>
+        <Input
+          leftIcon={
+            <MaterialCommunityIcons
+              name="lock-check"
+              size={22}
+              color="#128F51"
+            />
+          }
+          placeholder="Xác nhận mật khẩu"
+          onChangeText={(value) => (confirmPassRef.current = value)}
+          secureTextEntry={!isShowConfirm}
+          rightIcon={
+            <TouchableOpacity
+              className="absolute top-[13px] right-3"
+              onPress={() => {
+                setIsShowConfirm(!isShowConfirm);
+              }}
+            >
+              <Octicons
+                name={isShowConfirm ? "eye" : "eye-closed"}
+                size={22}
+                color="#BDBDBD"
+              />
+            </TouchableOpacity>
+          }
+        />
 
         <TouchableOpacity
           className="w-full bg-primary p-3 py-4 mt-8 rounded-2xl items-center"

@@ -56,7 +56,7 @@ const CreatureModal = () => {
             </CreatureTypeProvider>
           </>
         ) : (
-          <Loader />
+          <Loader width={450} height={450} />
         )}
       </View>
     </SafeAreaView>
