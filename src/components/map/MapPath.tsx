@@ -8,10 +8,16 @@ import { PROVINCES } from "@/constants/PathShape";
 
 const { height } = Dimensions.get("window");
 
-const projection = geoMercator().fitHeight(height, {
-  type: "FeatureCollection",
-  features: PROVINCES,
-});
+const projection = geoMercator().fitExtent(
+  [
+    [0, 0],
+    [height - 50, height + 10],
+  ],
+  {
+    type: "FeatureCollection",
+    features: PROVINCES,
+  }
+);
 
 const provincePaths = PROVINCES.map(geoPath().projection(projection));
 

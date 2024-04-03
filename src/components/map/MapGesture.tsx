@@ -2,6 +2,7 @@ import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import Animated, {
   clamp,
   useAnimatedProps,
+  useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
 import { G, Svg } from "react-native-svg";
@@ -19,6 +20,7 @@ const MapGesture: React.FC<Props> = ({ width, height, children }) => {
   const start = useSharedValue({ x: 0, y: 0 });
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
+  const focal = useSharedValue({ x: 0, y: 0 });
 
   const panGesture = Gesture.Pan()
     .averageTouches(true)
@@ -34,7 +36,12 @@ const MapGesture: React.FC<Props> = ({ width, height, children }) => {
 
   const pinchGesture = Gesture.Pinch()
     .onUpdate((e) => {
-      scale.value = clamp(0.9, e.scale * savedScale.value, 2.8);
+      scale.value = savedScale.value * e.scale;
+
+      focal.value = {
+        x: e.focalX,
+        y: e.focalY,
+      };
     })
     .onEnd(() => {
       savedScale.value = scale.value;
@@ -42,11 +49,15 @@ const MapGesture: React.FC<Props> = ({ width, height, children }) => {
 
   const composed = Gesture.Simultaneous(panGesture, pinchGesture);
 
-  const animatedProps = useAnimatedProps(() => ({
+  const animatedProps = useAnimatedStyle(() => ({
     transform: [
+      { translateX: focal.value.x },
+      { translateY: focal.value.y },
+      { scale: scale.value },
+      { translateX: -focal.value.x },
+      { translateY: -focal.value.y },
       { translateX: offset.value.x },
       { translateY: offset.value.y },
-      { scale: scale.value },
     ],
   }));
 

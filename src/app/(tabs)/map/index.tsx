@@ -10,7 +10,7 @@ const MapScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <GestureHandlerRootView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <MapGesture width={width} height={height}>
           <MapPath width={width} height={height} />
         </MapGesture>
