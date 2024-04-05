@@ -1,7 +1,5 @@
-import { GestureDetector, Gesture } from "react-native-gesture-handler";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-  clamp,
-  useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
@@ -18,44 +16,42 @@ interface Props {
 const MapGesture: React.FC<Props> = ({ width, height, children }) => {
   const offset = useSharedValue({ x: 0, y: 0 });
   const start = useSharedValue({ x: 0, y: 0 });
+  const center = useSharedValue({ x: 0, y: 0 });
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
-  const focal = useSharedValue({ x: 0, y: 0 });
 
-  const panGesture = Gesture.Pan()
-    .averageTouches(true)
+  const pan = Gesture.Pan()
     .onUpdate((e) => {
       offset.value = {
-        x: e.translationX / scale.value + start.value.x,
-        y: e.translationY / scale.value + start.value.y,
+        x: start.value.x + e.translationX / scale.value,
+        y: start.value.y + e.translationY / scale.value,
       };
     })
     .onEnd(() => {
       start.value = { ...offset.value };
     });
 
-  const pinchGesture = Gesture.Pinch()
+  const pinch = Gesture.Pinch()
     .onUpdate((e) => {
       scale.value = savedScale.value * e.scale;
-
-      focal.value = {
-        x: e.focalX,
-        y: e.focalY,
+      center.value = {
+        x: width / 2,
+        y: height / 2,
       };
     })
     .onEnd(() => {
       savedScale.value = scale.value;
     });
 
-  const composed = Gesture.Simultaneous(panGesture, pinchGesture);
+  const composed = Gesture.Simultaneous(pan, pinch);
 
   const animatedProps = useAnimatedStyle(() => ({
     transform: [
-      { translateX: focal.value.x },
-      { translateY: focal.value.y },
+      { translateX: center.value.x },
+      { translateY: center.value.y },
       { scale: scale.value },
-      { translateX: -focal.value.x },
-      { translateY: -focal.value.y },
+      { translateX: -center.value.x },
+      { translateY: -center.value.y },
       { translateX: offset.value.x },
       { translateY: offset.value.y },
     ],

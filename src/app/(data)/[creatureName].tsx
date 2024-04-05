@@ -61,7 +61,7 @@ const CreatureInformation = () => {
           <CreatureInforBody creatureData={creatureInfor} />
         </View>
       ) : (
-        <Loader />
+        <Loader width={450} height={450} />
       )}
     </SafeAreaView>
   );
