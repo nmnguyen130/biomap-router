@@ -1,45 +1,59 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import ContributedList from "@/components/ContributedList";
+import ContributedList from "@/components/contribute/ContributedList";
+import Colors from "@/utils/Colors";
+import { router } from "expo-router";
 
 const UserContributed = () => {
   return (
-    <View className="bg-white flex-1 px-4">
-      <View className="h-5/6">
-        <TouchableOpacity className="self-end mr-6 rounded-full border p-2 border-darker_primary">
-          <Ionicons name="add" size={24} color={"rgb(14, 108, 56)"} />
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 8 }}
+    >
+      <View className="flex-row items-center justify-between my-2">
+        <Text className="text-3xl ms-6">Đóng góp của bạn</Text>
+        <TouchableOpacity
+          className="border border-darker_primary rounded-full me-6 p-2"
+          onPress={() => router.replace("(modals)/form")}
+        >
+          <Ionicons name="add" size={24} color={Colors.darker_primary} />
         </TouchableOpacity>
-        <Text className=" text-3xl ml-6 mb-2 mt-4">Đóng góp của bạn</Text>
+      </View>
 
-        <View className="flex-row justify-around m-3">
-          <View className="flex-row w-1/4 items-center rounded-lg border p-3 border-blue-500">
-            <Text className="text-blue-500">Tổng: 30</Text>
-          </View>
-
-          <View className="flex-row w-1/4 justify-around items-center rounded-lg border p-3 border-lighter_primary">
-            <MaterialCommunityIcons
-              name="checkbox-marked-circle-outline"
-              size={24}
-              color="rgb(74, 174, 112)"
-            />
-            <Text className="text-lighter_primary">20</Text>
-          </View>
-
-          <View className="flex-row w-1/4 justify-around items-center rounded-lg border p-3 border-yellow-500">
-            <MaterialCommunityIcons
-              name="progress-clock"
-              size={24}
-              color="rgb(234, 179, 8)"
-            />
-            <Text className="text-yellow-500">10</Text>
-          </View>
+      <View className="flex-row justify-around mx-2.5 my-0.5">
+        <View className="flex-row w-max justify-around items-center border border-blue-500 rounded-lg px-1 pe-3">
+          <MaterialCommunityIcons
+            className="px-1"
+            name="upload"
+            size={24}
+            color={Colors.blue}
+          />
+          <Text className="text-blue-500">Tổng: 30</Text>
         </View>
 
-        <ContributedList />
+        <View className="flex-row w-1/4 justify-around items-center border border-lighter_primary rounded-lg p-3">
+          <MaterialCommunityIcons
+            name="checkbox-marked-circle-outline"
+            size={24}
+            color={Colors.lighter_primary}
+          />
+          <Text className="text-lighter_primary">20</Text>
+        </View>
+
+        <View className="flex-row w-1/4 justify-around items-center border border-yellow-500 rounded-lg p-3">
+          <MaterialCommunityIcons
+            name="progress-clock"
+            size={24}
+            color={Colors.orange}
+          />
+          <Text className="text-yellow-500">10</Text>
+        </View>
       </View>
-    </View>
+
+      <ContributedList />
+    </SafeAreaView>
   );
 };
 

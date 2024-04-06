@@ -6,7 +6,7 @@ const ContributeLayout = () => {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ headerTitle: "Contribute", headerShown: false }}
+        options={{ headerTitle: "User", headerShown: false }}
       />
     </Stack>
   );

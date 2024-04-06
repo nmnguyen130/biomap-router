@@ -10,19 +10,17 @@ const ImagePicker = () => {
   const pickImage = () => {};
 
   return (
-    <View>
-      <TouchableOpacity
-        onPress={() => setShow(true)}
-        className="self-center justify-center items-center border-primary border-[3px] rounded-lg w-[230px] h-[170px]"
-      >
-        {/* <Image
-          source={require("../../assets/Aquila_clanga.jpg")}
+    <TouchableOpacity
+      onPress={() => setShow(true)}
+      className="self-center justify-center items-center border-primary border-2 rounded-lg w-2/3 h-44 my-3"
+    >
+      {/* <Image
+          source={require("@assets/Aquila_clanga.jpg")}
           className="self-center rounded-md w-[230px] h-[170px]"
         /> */}
 
-        <Ionicons name="image-outline" size={44} color="green" />
-      </TouchableOpacity>
-    </View>
+      <Ionicons name="image-outline" size={44} color="green" />
+    </TouchableOpacity>
   );
 };
 
