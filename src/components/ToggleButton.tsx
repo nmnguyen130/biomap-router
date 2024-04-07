@@ -14,7 +14,7 @@ const ToggleButton = () => {
 
   return (
     <View className="flex mb-4">
-      <View className="h-[49px] border-[0.5px] rounded-3xl flex-row mx-[10px]">
+      <View className="h-[49px] border-[0.5px] rounded-3xl flex-row mx-2.5">
         <Button
           type={"animal"}
           onPress={() => handleToggle("animal")}

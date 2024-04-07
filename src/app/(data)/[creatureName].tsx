@@ -1,11 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { DocumentData, doc, getDoc } from "firebase/firestore";
+import {
+  DocumentData,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
 import CreatureInforHeader from "@/components/content/CreatureInforHeader";
 import CreatureInforBody from "@/components/content/CreatureInforBody";
-import { db } from "@/utils/firebase";
+import { db, provinceRef } from "@/utils/firebase";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getURLFromCache } from "@/utils/Storage";
 import Loader from "@/components/Loader";
@@ -39,15 +46,47 @@ const CreatureInformation = () => {
           creatureData.image_url = cacheImageURL.imageURL;
         }
 
-        setCreatureInfor({ ...creatureData, id });
+        return { ...creatureData, id };
       }
     } catch (error) {
       console.error("Error fetching creature information:", error);
     }
   }, [creatureName, type]);
 
+  const getProvincesContainCreature = useCallback(async () => {
+    try {
+      const field = type === "Animals" ? "animal_list" : "plant_list";
+      const q = query(
+        provinceRef,
+        where(field, "array-contains", creatureName)
+      );
+      const snapshot = await getDocs(q);
+      let provinces = snapshot.docs.map((doc) => ({
+        name: doc.data().name,
+      }));
+
+      return provinces;
+    } catch (error) {
+      console.error("Error fetching provinces contain creature:", error);
+    }
+  }, [creatureName]);
+
   useEffect(() => {
-    getCreatureInfor();
+    const fetchData = async () => {
+      try {
+        const creatureData = await getCreatureInfor();
+        const provinces = await getProvincesContainCreature();
+
+        if (creatureData && provinces) {
+          const mergedData = { ...creatureData, provinces };
+          setCreatureInfor(mergedData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (

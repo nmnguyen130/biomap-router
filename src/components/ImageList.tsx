@@ -100,7 +100,7 @@ const ImageList: React.FC<Props> = ({ creatureList, provinceName }) => {
           data={getSelectedCreatureData()}
           renderItem={({ item }) => (
             <TouchableOpacity
-              className="mx-4 my-[10px] pb-[10px] rounded-md items-center bg-primary"
+              className="mx-4 my-2.5 pb-2.5 rounded-md items-center bg-primary"
               onPress={() => {
                 router.push({
                   pathname: "(data)/[creatureName]",
@@ -116,14 +116,14 @@ const ImageList: React.FC<Props> = ({ creatureList, provinceName }) => {
                 source={{ uri: item.imageURL }}
                 style={{ height: 200, width: "100%", borderRadius: 6 }}
               />
-              <Text className="text-[16px] pt-[6px] text-yellow-300">
+              <Text className="text-base pt-1.5 text-yellow-300">
                 {item.name}
               </Text>
             </TouchableOpacity>
           )}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={() => (
-            <View className="h-[2px] mx-4 bg-gray-300"></View>
+            <View className="h-0.5 mx-4 bg-gray-300"></View>
           )}
         />
       ) : (
