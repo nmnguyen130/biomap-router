@@ -9,6 +9,9 @@ module.exports = {
         lighter_primary: "#4AAE70",
         darker_primary: "#0E6C38",
       },
+      aspectRatio: {
+        "4/3": "4 / 3",
+      },
     },
   },
   future: {

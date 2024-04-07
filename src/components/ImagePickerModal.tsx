@@ -1,55 +1,72 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useSheet } from "@/hooks/ModalContext";
 
-const ImagePickerModal = () => {
-  const { show, setShow, toggleShow } = useSheet();
+interface Props {
+  modalVisible: boolean;
+  onDismiss: () => void;
+  onCameraPress: () => void;
+  onLibraryPress: () => void;
+  onRemovePress: () => void;
+}
 
-  if (show)
-    return (
-      <>
-        {
-          <View
-            style={[
-              StyleSheet.absoluteFillObject,
-              { backgroundColor: "rgba(0, 0, 0, 0.5)" },
-            ]}
-          />
-        }
-        <View>
-          <Modal transparent={true}>
-            <View className="flex-1 justify-center items-center bg-lighter_primary mx-6 my-[300px] rounded-lg">
-              <Text className="text-2xl top-4 absolute text-gray-800">
-                Choose an option
-              </Text>
-              <TouchableOpacity
-                onPress={toggleShow}
-                className="absolute top-4 right-4"
-              >
-                <Ionicons name="close" size={24} color="black" />
-              </TouchableOpacity>
-              <View className="flex-row items-center w-full justify-evenly pt-6">
-                <TouchableOpacity className="items-center rounded-md w-24 border p-3 bg-yellow-300">
-                  <Ionicons name="camera-outline" size={24} color="black" />
-                  <Text>Camera</Text>
-                </TouchableOpacity>
+const ImagePickerModal: React.FC<Props> = ({
+  modalVisible,
+  onDismiss,
+  onCameraPress,
+  onLibraryPress,
+  onRemovePress,
+}) => {
+  return (
+    <>
+      {modalVisible && (
+        <View
+          style={[
+            StyleSheet.absoluteFillObject,
+            { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+          ]}
+        />
+      )}
+      <Modal visible={modalVisible} transparent={true}>
+        <View className="flex-1 justify-center items-center bg-lighter_primary mx-6 my-[300px] rounded-lg">
+          <Text className="text-2xl top-4 absolute text-gray-800">
+            Choose an option
+          </Text>
+          <TouchableOpacity
+            onPress={onDismiss}
+            className="absolute top-4 right-4"
+          >
+            <Ionicons name="close" size={24} color="black" />
+          </TouchableOpacity>
+          <View className="flex-row items-center w-full justify-evenly pt-6">
+            <TouchableOpacity
+              className="items-center rounded-md w-24 border p-3 bg-yellow-300"
+              onPress={onCameraPress}
+            >
+              <Ionicons name="camera-outline" size={24} color="black" />
+              <Text>Camera</Text>
+            </TouchableOpacity>
 
-                <TouchableOpacity className="items-center rounded-md w-24 border p-3 bg-yellow-300">
-                  <Ionicons name="image-outline" size={24} color="black" />
-                  <Text>Gallery</Text>
-                </TouchableOpacity>
+            <TouchableOpacity
+              className="items-center rounded-md w-24 border p-3 bg-yellow-300"
+              onPress={onLibraryPress}
+            >
+              <Ionicons name="image-outline" size={24} color="black" />
+              <Text>Gallery</Text>
+            </TouchableOpacity>
 
-                <TouchableOpacity className="items-center rounded-md w-24 border p-3 bg-yellow-300">
-                  <Ionicons name="trash-outline" size={24} color="black" />
-                  <Text>Remove</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
+            <TouchableOpacity
+              className="items-center rounded-md w-24 border p-3 bg-yellow-300"
+              onPress={onRemovePress}
+            >
+              <Ionicons name="trash-outline" size={24} color="black" />
+              <Text>Remove</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </>
-    );
+      </Modal>
+    </>
+  );
 };
 
 export default ImagePickerModal;
