@@ -1,10 +1,13 @@
 import React, { useRef } from "react";
-import { View, TouchableOpacity, TextInput, Text } from "react-native";
+import { View, TouchableOpacity, TextInput, Text, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import ToggleButton from "../ToggleButton";
 import { useCreatureType } from "@/hooks/CreatureTypeContext";
 import { Image } from "expo-image";
+import { addFormData } from "@/api/FormApi";
+import { useAuth } from "@/hooks/AuthContext";
+import { router } from "expo-router";
 
 interface Props {
   openModal: () => void;
@@ -13,6 +16,7 @@ interface Props {
 
 const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
   const { selectedType } = useCreatureType();
+  const { user } = useAuth();
 
   const scientificName = useRef("");
   const name = useRef("");
@@ -20,7 +24,34 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
   const behavior = useRef("");
   const habitat = useRef("");
 
-  const handlerSend = async () => {};
+  const handlerSend = async () => {
+    if (!name.current && !imageUrl) {
+      Alert.alert("Đóng góp", "Tên/Hình ảnh không được để trống!");
+      return;
+    }
+
+    const today = new Date().toUTCString();
+
+    const data = {
+      userId: user?.userId,
+      scientificName: scientificName.current,
+      name: name.current,
+      characteristic: characteristic.current,
+      behavior: behavior.current,
+      habitat: habitat.current,
+      imageUrl: imageUrl as unknown as string,
+      type: selectedType,
+      submissionDate: today,
+      status: "pending",
+    };
+
+    const response = await addFormData(data);
+
+    if (response.success) {
+      Alert.alert("Thành công!", "Đã thêm mới dữ liệu.");
+      router.replace("(tabs)/contribute");
+    }
+  };
 
   return (
     <View className="flex">

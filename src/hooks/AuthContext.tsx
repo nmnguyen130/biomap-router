@@ -16,7 +16,10 @@ import { doc, setDoc } from "@firebase/firestore";
 import { auth, db } from "@/utils/firebase";
 import { getDoc } from "firebase/firestore";
 
-interface User {}
+interface User {
+  userId: string;
+  username: string;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -49,7 +52,6 @@ export const AuthContextProvider: React.FC<{ children: ReactNode }> = ({
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsAuthenticated(true);
-        setUser(user);
         updateUserData(user.uid);
       } else {
         setIsAuthenticated(false);

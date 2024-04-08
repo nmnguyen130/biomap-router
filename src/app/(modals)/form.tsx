@@ -9,7 +9,7 @@ import Form from "@/components/contribute/Form";
 
 const NewContributeForm = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [image, setImage] = useState<string | null>("");
+  const [imageUrl, setImageUrl] = useState<string | null>("");
 
   const uploadImage = async (mode: string) => {
     try {
@@ -49,10 +49,10 @@ const NewContributeForm = () => {
     try {
       if (image) {
         // Upload displayed image
-        setImage(image.assets[0].uri);
+        setImageUrl(image.assets[0].uri);
         setModalVisible(false);
       } else {
-        setImage(null);
+        setImageUrl(null);
       }
     } catch (error) {
       throw error;
@@ -84,7 +84,7 @@ const NewContributeForm = () => {
 
       <ScrollView>
         <CreatureTypeProvider>
-          <Form openModal={() => setModalVisible(true)} imageUrl={image} />
+          <Form openModal={() => setModalVisible(true)} imageUrl={imageUrl} />
         </CreatureTypeProvider>
       </ScrollView>
 
