@@ -6,10 +6,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { DocumentData, getDocs, query, where } from "@firebase/firestore";
 
 import { provinceRef } from "@/utils/firebase";
-import ImageList from "@/components/ImageList";
-import ToggleButton from "@/components/ToggleButton";
+import { ImageList, Loader, ToggleButton } from "@/components";
 import { CreatureTypeProvider } from "@/hooks/CreatureTypeContext";
-import Loader from "@/components/Loader";
 
 const CreatureModal = () => {
   const { provinceName } = useLocalSearchParams<{ provinceName: string }>();

@@ -1,13 +1,14 @@
-import React, { useRef } from "react";
+import { useRef, useState } from "react";
 import { View, TouchableOpacity, TextInput, Text, Alert } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import ToggleButton from "../ToggleButton";
-import { useCreatureType } from "@/hooks/CreatureTypeContext";
-import { Image } from "expo-image";
-import { addFormData } from "@/api/FormApi";
-import { useAuth } from "@/hooks/AuthContext";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { Image } from "expo-image";
+
+import ToggleButton from "../ToggleButton";
+import { useAuth } from "@/hooks/AuthContext";
+import { useCreatureType } from "@/hooks/CreatureTypeContext";
+import { addFormData } from "@/api/FormApi";
+import Button from "../Button";
 
 interface Props {
   openModal: () => void;
@@ -17,6 +18,7 @@ interface Props {
 const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
   const { selectedType } = useCreatureType();
   const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const scientificName = useRef("");
   const name = useRef("");
@@ -24,13 +26,15 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
   const behavior = useRef("");
   const habitat = useRef("");
 
+  const options = { timeZone: "Asia/Ho_Chi_Minh", hour12: false };
+
   const handlerSend = async () => {
     if (!name.current && !imageUrl) {
       Alert.alert("Đóng góp", "Tên/Hình ảnh không được để trống!");
       return;
     }
 
-    const today = new Date().toUTCString();
+    const today = new Date().toLocaleString("en-US", options);
 
     const data = {
       userId: user?.userId,
@@ -131,12 +135,9 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity
-          className="items-center rounded-lg bg-primary p-4 mx-2 mt-5"
-          onPress={handlerSend}
-        >
-          <Text className="text-white">Send</Text>
-        </TouchableOpacity>
+        <View className="mx-2">
+          <Button onPress={handlerSend} value="Gửi" />
+        </View>
       </View>
     </View>
   );

@@ -16,15 +16,17 @@ const ToggleButton = () => {
     <View className="flex mb-4">
       <View className="h-[49px] border-[0.5px] rounded-3xl flex-row mx-2.5">
         <Button
-          type={"animal"}
+          width="half"
           onPress={() => handleToggle("animal")}
           isSelected={selectedType === "animal"}
+          value="Động vật"
         />
 
         <Button
-          type={"plant"}
+          width="half"
           onPress={() => handleToggle("plant")}
           isSelected={selectedType === "plant"}
+          value="Thực vật"
         />
       </View>
     </View>

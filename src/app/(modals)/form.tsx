@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
+
 import { CreatureTypeProvider } from "@/hooks/CreatureTypeContext";
-import ImagePickerModal from "@/components/ImagePickerModal";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Form from "@/components/contribute/Form";
+import { ImagePickerModal } from "@/components";
+import { Form } from "@/components/contribute";
 
 const NewContributeForm = () => {
   const [modalVisible, setModalVisible] = useState(false);

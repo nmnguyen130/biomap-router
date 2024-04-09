@@ -1,11 +1,11 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import ContributedList from "@/components/contribute/ContributedList";
-import Colors from "@/utils/Colors";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
+
+import { ContributedList } from "@/components/contribute";
+import Colors from "@/utils/Colors";
 
 const UserContributed = () => {
   return (

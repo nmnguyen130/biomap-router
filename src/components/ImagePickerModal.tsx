@@ -1,5 +1,4 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 interface Props {

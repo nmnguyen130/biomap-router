@@ -1,17 +1,25 @@
 import { Text, TouchableOpacity } from "react-native";
 
 interface Props {
-  type: string;
   onPress: () => void;
-  isSelected: boolean;
+  isSelected?: boolean;
+  width?: "half" | "full";
+  value: string;
 }
 
-const Button: React.FC<Props> = ({ type, onPress, isSelected }) => {
+const Button: React.FC<Props> = ({
+  width = "full",
+  onPress,
+  isSelected = true,
+  value,
+}) => {
+  const buttonWidth = width === "full" ? "w-full p-4 mt-4" : "w-1/2";
+
   return (
     <TouchableOpacity
       className={`
     ${isSelected ? "bg-lighter_primary" : "bg-white"}
-    w-1/2 rounded-3xl items-center justify-center
+    ${buttonWidth} rounded-3xl items-center justify-center
   `}
       onPress={() => onPress()}
     >
@@ -21,7 +29,7 @@ const Button: React.FC<Props> = ({ type, onPress, isSelected }) => {
         text-base font-medium
       `}
       >
-        {type === "animal" ? "Động Vật" : "Thực Vật"}
+        {value}
       </Text>
     </TouchableOpacity>
   );

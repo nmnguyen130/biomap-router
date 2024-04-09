@@ -1,6 +1,6 @@
-import { View } from "react-native";
 import React from "react";
-import Loader from "@/components/Loader";
+import { View } from "react-native";
+import { Loader } from "@/components";
 
 const SplashScreen = () => {
   return (

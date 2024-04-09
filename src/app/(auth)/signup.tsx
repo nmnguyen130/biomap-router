@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Octicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+
+import { Button, Input } from "@/components";
 import { useAuth } from "@/hooks/AuthContext";
-import Input from "@/components/Input";
 
 const SignupScreen = () => {
   const [isShow, setIsShow] = useState(false);
@@ -127,12 +127,7 @@ const SignupScreen = () => {
           }
         />
 
-        <TouchableOpacity
-          className="w-full bg-primary p-3 py-4 mt-8 rounded-2xl items-center"
-          onPress={handleRegister}
-        >
-          <Text className="text-white text-[16px] font-bold">Đăng Ký</Text>
-        </TouchableOpacity>
+        <Button onPress={handleRegister} value="Đăng Ký" />
 
         <View className="flex-row justify-center items-center mt-6">
           <Text>Đã có tài khoản? </Text>

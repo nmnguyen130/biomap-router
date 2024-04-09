@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
-import { Octicons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+
+import { Button, Input } from "@/components";
 import { useAuth } from "@/hooks/AuthContext";
-import Input from "@/components/Input";
 
 const LoginScreen = () => {
   const [isShow, setIsShow] = useState(false);
@@ -70,14 +70,10 @@ const LoginScreen = () => {
           }
         />
 
-        <TouchableOpacity
-          className="w-full bg-primary p-3 mt-[36px] mb-3 rounded-2xl items-center py-4"
-          onPress={handleLogin}
-        >
-          <Text className="text-white text-[16px] font-bold">Đăng Nhập</Text>
-        </TouchableOpacity>
+        <Button onPress={handleLogin} value="Đăng Nhập" />
+
         <TouchableOpacity>
-          <Text className="text-lighter_primary mb-4">Quên mật khẩu?</Text>
+          <Text className="text-lighter_primary my-3">Quên mật khẩu?</Text>
         </TouchableOpacity>
 
         <View className="w-11/12 bg-gray-200 h-px rounded-full justify-center items-center my-5">

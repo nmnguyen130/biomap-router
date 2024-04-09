@@ -1,9 +1,8 @@
 import { useWindowDimensions } from "react-native";
-
-import MapPath from "@/components/map/MapPath";
-import MapGesture from "@/components/map/MapGesture";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { MapGesture, MapPath } from "@/components/map";
 
 const MapScreen = () => {
   const { width, height } = useWindowDimensions();

@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { getDocs, query, where } from "@firebase/firestore";
+import { useAuth } from "@/hooks/AuthContext";
+import { formRef } from "@/utils/firebase";
 
 const contributedData = [
   { scienceName: "Ursus thibetanus" },
@@ -17,6 +20,18 @@ const contributedData = [
 ];
 
 const ContributedList = () => {
+  const { user } = useAuth();
+
+  // const getAllOfContribution = async () => {
+  //   const q = query(formRef, where("userId", "==", user?.userId));
+  //   const snapshot = await getDocs(q);
+  //   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  // };
+
+  // useEffect(() => {
+  //   console.log(getAllOfContribution());
+  // }, []);
+
   return (
     <View className="h-5/6 m-2">
       <FlatList

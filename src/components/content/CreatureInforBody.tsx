@@ -1,5 +1,4 @@
 import { View, Text, FlatList } from "react-native";
-import React from "react";
 import { DocumentData } from "@firebase/firestore";
 
 import { Image } from "expo-image";

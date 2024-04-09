@@ -1,6 +1,6 @@
 import { formRef, storage } from "@/utils/firebase";
-import { addDoc } from "@firebase/firestore";
-import { ref, uploadBytesResumable } from "@firebase/storage";
+import { addDoc, updateDoc } from "@firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 const tableName = "Forms";
 
@@ -19,10 +19,13 @@ interface FormData {
 
 export const addFormData = async (data: FormData) => {
   try {
-    await uploadImageToFirebase(data.imageUrl, (v) => console.log(v));
+    const [uploadPromise, addDocPromise] = await Promise.all([
+      uploadImageToFirebase(data.imageUrl),
+      addDoc(formRef, { ...data, imageUrl: "" }),
+    ]);
 
-    data.imageUrl = `form/${data.imageUrl.split("/").pop()}`;
-    await addDoc(formRef, data);
+    const { downloadUrl } = uploadPromise;
+    await updateDoc(addDocPromise, { imageUrl: downloadUrl });
     return { success: true };
   } catch (error) {
     return { success: false, msg: (error as Error).message };
@@ -30,9 +33,8 @@ export const addFormData = async (data: FormData) => {
 };
 
 const uploadImageToFirebase = async (
-  imageUrl: string,
-  onProgress: (v: any) => void
-) => {
+  imageUrl: string
+): Promise<{ downloadUrl: string }> => {
   const imageRef = ref(storage, `form/${imageUrl.split("/").pop()}`);
 
   try {
@@ -41,17 +43,18 @@ const uploadImageToFirebase = async (
 
     const uploadTask = uploadBytesResumable(imageRef, blob);
 
-    return new Promise(() => {
+    return new Promise((resolve, reject) => {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          onProgress && onProgress(progress);
+          // Optional: Handle progress updates if needed
         },
         (error) => {
-          console.error("Error uploading image:", error);
-          throw error;
+          reject(error);
+        },
+        async () => {
+          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+          resolve({ downloadUrl });
         }
       );
     });

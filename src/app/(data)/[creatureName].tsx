@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   DocumentData,
   doc,
@@ -10,12 +11,10 @@ import {
   where,
 } from "firebase/firestore";
 
-import CreatureInforHeader from "@/components/content/CreatureInforHeader";
-import CreatureInforBody from "@/components/content/CreatureInforBody";
+import { Loader } from "@/components";
+import { CreatureInforBody, CreatureInforHeader } from "@/components/content";
 import { db, provinceRef } from "@/utils/firebase";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { getURLFromCache } from "@/utils/Storage";
-import Loader from "@/components/Loader";
 
 const CreatureInformation = () => {
   const { creatureName, type, provinceName } = useLocalSearchParams<{
