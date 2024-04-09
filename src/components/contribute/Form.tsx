@@ -1,14 +1,14 @@
 import { useRef, useState } from "react";
-import { View, TouchableOpacity, TextInput, Text, Alert } from "react-native";
+import { View, TouchableOpacity, TextInput } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Image } from "expo-image";
 
-import ToggleButton from "../ToggleButton";
+import { Button, Dialog, ToggleButton } from "@/components";
 import { useAuth } from "@/hooks/AuthContext";
 import { useCreatureType } from "@/hooks/CreatureTypeContext";
 import { addFormData } from "@/api/FormApi";
-import Button from "../Button";
+import { MessageType } from "../Dialog";
 
 interface Props {
   openModal: () => void;
@@ -20,6 +20,11 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
+  const [dialogType, setDialogType] = useState(MessageType.Success);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [isShowDialog, setIsShowDialog] = useState(false);
+
   const scientificName = useRef("");
   const name = useRef("");
   const characteristic = useRef("");
@@ -30,7 +35,10 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
 
   const handlerSend = async () => {
     if (!name.current && !imageUrl) {
-      Alert.alert("Đóng góp", "Tên/Hình ảnh không được để trống!");
+      setDialogType(MessageType.Alert);
+      setTitle("Đóng góp");
+      setContent("Tên/Hình ảnh không được để trống!");
+      setIsShowDialog(true);
       return;
     }
 
@@ -52,7 +60,10 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
     const response = await addFormData(data);
 
     if (response.success) {
-      Alert.alert("Thành công!", "Đã thêm mới dữ liệu.");
+      setDialogType(MessageType.Success);
+      setTitle("Thành công!");
+      setContent("Đã thêm mới dữ liệu.");
+      setIsShowDialog(true);
       router.replace("(tabs)/contribute");
     }
   };
@@ -139,6 +150,14 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
           <Button onPress={handlerSend} value="Gửi" />
         </View>
       </View>
+
+      <Dialog
+        dialogType={dialogType}
+        isVisible={isShowDialog}
+        onClose={() => setIsShowDialog(false)}
+        title={title}
+        content={content}
+      />
     </View>
   );
 };

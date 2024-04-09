@@ -1,5 +1,6 @@
 import BottomSheet from "./BottomSheet";
 import Button from "./Button";
+import Dialog from "./Dialog";
 import ImageList from "./ImageList";
 import ImagePickerModal from "./ImagePickerModal";
 import Input from "./Input";
@@ -10,6 +11,7 @@ import ToggleButton from "./ToggleButton";
 export {
   BottomSheet,
   Button,
+  Dialog,
   ImageList,
   ImagePickerModal,
   Input,

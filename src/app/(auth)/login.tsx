@@ -1,13 +1,19 @@
 import { useRef, useState } from "react";
-import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-import { Button, Input } from "@/components";
+import { Button, Dialog, Input } from "@/components";
 import { useAuth } from "@/hooks/AuthContext";
+import { MessageType } from "@/components/Dialog";
 
 const LoginScreen = () => {
   const [isShow, setIsShow] = useState(false);
+
+  const [dialogType, setDialogType] = useState(MessageType.Success);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [isShowDialog, setIsShowDialog] = useState(false);
 
   const { login } = useAuth();
 
@@ -16,14 +22,20 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     if (!emailRef.current || !passwordRef.current) {
-      Alert.alert("Đăng nhập", "Vui lòng điền đầy đủ thông tin!");
+      setDialogType(MessageType.Alert);
+      setTitle("Đăng nhập");
+      setContent("Vui lòng điền đầy đủ thông tin!");
+      setIsShowDialog(true);
       return;
     }
 
     const response = await login(emailRef.current, passwordRef.current);
 
     if (!response.success) {
-      Alert.alert("Đăng nhập thất bại!", response.msg);
+      setDialogType(MessageType.Error);
+      setTitle("Đăng nhập thất bại!");
+      setContent(response.msg as string);
+      setIsShowDialog(true);
     }
   };
 
@@ -89,6 +101,14 @@ const LoginScreen = () => {
           <Text className="text-[16px]">Tạo tài khoản mới</Text>
         </TouchableOpacity>
       </View>
+
+      <Dialog
+        dialogType={dialogType}
+        isVisible={isShowDialog}
+        onClose={() => setIsShowDialog(false)}
+        title={title}
+        content={content}
+      />
     </View>
   );
 };

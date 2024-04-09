@@ -5,10 +5,16 @@ import { router } from "expo-router";
 
 import { Button, Input } from "@/components";
 import { useAuth } from "@/hooks/AuthContext";
+import Dialog, { MessageType } from "@/components/Dialog";
 
 const SignupScreen = () => {
   const [isShow, setIsShow] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
+
+  const [dialogType, setDialogType] = useState(MessageType.Success);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [isShowDialog, setIsShowDialog] = useState(false);
 
   const { register } = useAuth();
 
@@ -24,7 +30,10 @@ const SignupScreen = () => {
       !passwordRef.current ||
       !confirmPassRef.current
     ) {
-      Alert.alert("Đăng ký", "Vui lòng điền đầy đủ thông tin!");
+      setDialogType(MessageType.Alert);
+      setTitle("Đăng ký");
+      setContent("Vui lòng điền đầy đủ thông tin!");
+      setIsShowDialog(true);
       return;
     }
 
@@ -35,7 +44,10 @@ const SignupScreen = () => {
     );
 
     if (!response.success) {
-      Alert.alert("Đăng ký", response.msg);
+      setDialogType(MessageType.Error);
+      setTitle("Đăng ký thất bại!");
+      setContent(response.msg as string);
+      setIsShowDialog(true);
     }
   };
 
@@ -136,6 +148,14 @@ const SignupScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <Dialog
+        dialogType={dialogType}
+        isVisible={isShowDialog}
+        onClose={() => setIsShowDialog(false)}
+        title={title}
+        content={content}
+      />
     </View>
   );
 };

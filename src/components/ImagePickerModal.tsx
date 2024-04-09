@@ -26,7 +26,7 @@ const ImagePickerModal: React.FC<Props> = ({
           ]}
         />
       )}
-      <Modal visible={modalVisible} transparent={true}>
+      <Modal visible={modalVisible} transparent>
         <View className="flex-1 justify-center items-center bg-lighter_primary mx-6 my-[300px] rounded-lg">
           <Text className="text-2xl top-4 absolute text-gray-800">
             Choose an option
