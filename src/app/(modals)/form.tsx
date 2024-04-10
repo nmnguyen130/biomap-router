@@ -5,12 +5,15 @@ import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 
 import { CreatureTypeProvider } from "@/hooks/CreatureTypeContext";
-import { ImagePickerModal } from "@/components";
+import { CheckList, Dialog, ImagePickerModal } from "@/components";
 import { Form } from "@/components/contribute";
+import { DisplayMode, ModalProvider, useModal } from "@/hooks/ModalContext";
 
 const NewContributeForm = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>("");
+
+  const { displayMode, isOpen, modalContent, hide } = useModal();
 
   const uploadImage = async (mode: string) => {
     try {
@@ -96,8 +99,29 @@ const NewContributeForm = () => {
         onLibraryPress={() => uploadImage("gallery")}
         onRemovePress={() => removeImage()}
       />
+
+      {isOpen &&
+        (displayMode === DisplayMode.Dialog ? (
+          <Dialog
+            dialogType={modalContent.dialogType}
+            isVisible={isOpen}
+            onClose={hide}
+            title={modalContent.title}
+            content={modalContent.content}
+          />
+        ) : (
+          <CheckList isVisible={isOpen} onClose={hide} />
+        ))}
     </SafeAreaView>
   );
 };
 
-export default NewContributeForm;
+const ContributeForm = () => {
+  return (
+    <ModalProvider>
+      <NewContributeForm />
+    </ModalProvider>
+  );
+};
+
+export default ContributeForm;

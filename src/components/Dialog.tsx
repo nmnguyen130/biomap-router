@@ -51,7 +51,9 @@ const Dialog: React.FC<Props> = ({
           <View
             style={[
               StyleSheet.absoluteFillObject,
-              { backgroundColor: "rgba(0, 0, 0, 0.4)" },
+              {
+                backgroundColor: "rgba(0, 0, 0, 0.4)",
+              },
             ]}
           />
         }

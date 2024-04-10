@@ -13,7 +13,7 @@ const Button: React.FC<Props> = ({
   isSelected = true,
   value,
 }) => {
-  const buttonWidth = width === "full" ? "w-full p-4 mt-4" : "w-1/2";
+  const buttonWidth = width === "full" ? "w-full p-4 mt-4" : "w-1/2 p-4";
 
   return (
     <TouchableOpacity

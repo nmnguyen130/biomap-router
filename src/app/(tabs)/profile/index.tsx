@@ -1,38 +1,16 @@
-import { Text, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
-import { useAuth } from "@/hooks/AuthContext";
-import { Dialog } from "@/components";
-import { MessageType } from "@/components/Dialog";
+import { Image } from "expo-image";
+import { CheckList } from "@/components";
+import { useState } from "react";
 
 const ProfileScreen = () => {
-  const { logout } = useAuth();
-  const [isShow, setIsShow] = useState(false);
-
-  const handleLogout = async () => {
-    await logout();
-  };
+  const [isVisible, setIsVisible] = useState(true);
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-    >
-      <TouchableOpacity onPress={handleLogout}>
-        <Text className="text-2xl">Logout</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity className="mt-10" onPress={() => setIsShow(true)}>
-        <Text className="text-2xl">Open Dialog</Text>
-      </TouchableOpacity>
-
-      <Dialog
-        dialogType={MessageType.Success}
-        isVisible={isShow}
-        onClose={() => setIsShow(false)}
-        title="Success!"
-        content="Login success"
-      />
+    <SafeAreaView style={{ flex: 1 }}>
+      <View className="h-1/3 items-center bg-lighter_primary z-10"></View>
+      <CheckList isVisible={isVisible} onClose={() => setIsVisible(false)} />
     </SafeAreaView>
   );
 };

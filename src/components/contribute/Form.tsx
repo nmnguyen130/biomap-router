@@ -1,14 +1,15 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { View, TouchableOpacity, TextInput } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Image } from "expo-image";
 
-import { Button, Dialog, ToggleButton } from "@/components";
+import { Button, ToggleButton } from "@/components";
 import { useAuth } from "@/hooks/AuthContext";
 import { useCreatureType } from "@/hooks/CreatureTypeContext";
 import { addFormData } from "@/api/FormApi";
 import { MessageType } from "../Dialog";
+import { DisplayMode, useModal } from "@/hooks/ModalContext";
 
 interface Props {
   openModal: () => void;
@@ -18,12 +19,8 @@ interface Props {
 const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
   const { selectedType } = useCreatureType();
   const { user } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
 
-  const [dialogType, setDialogType] = useState(MessageType.Success);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [isShowDialog, setIsShowDialog] = useState(false);
+  const { show } = useModal();
 
   const scientificName = useRef("");
   const name = useRef("");
@@ -35,10 +32,11 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
 
   const handlerSend = async () => {
     if (!name.current && !imageUrl) {
-      setDialogType(MessageType.Alert);
-      setTitle("Đóng góp");
-      setContent("Tên/Hình ảnh không được để trống!");
-      setIsShowDialog(true);
+      show(DisplayMode.Dialog, {
+        dialogType: MessageType.Alert,
+        title: "Đóng góp",
+        content: "Tên/Hình ảnh không được để trống!",
+      });
       return;
     }
 
@@ -60,16 +58,12 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
     const response = await addFormData(data);
 
     if (response.success) {
-      setDialogType(MessageType.Success);
-      setTitle("Thành công!");
-      setContent("Đã thêm mới dữ liệu.");
-      setIsShowDialog(true);
       router.replace("(tabs)/contribute");
     }
   };
 
   return (
-    <View className="flex">
+    <View className="flex-1">
       <ToggleButton />
 
       <View>
@@ -118,14 +112,17 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
           ></TextInput>
         </View>
 
-        <TouchableOpacity className="m-3 flex-row justify-between items-center pb-3 border-b-[1px] border-gray-400">
+        <TouchableOpacity
+          className="m-3 flex-row justify-between items-center pb-3 border-b border-gray-400"
+          onPress={() => show(DisplayMode.Checklist)}
+        >
           <TextInput
             multiline
             editable={false}
             className="w-11/12 text-gray-800"
             placeholder="Tỉnh"
           ></TextInput>
-          <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+          <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -150,14 +147,6 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
           <Button onPress={handlerSend} value="Gửi" />
         </View>
       </View>
-
-      <Dialog
-        dialogType={dialogType}
-        isVisible={isShowDialog}
-        onClose={() => setIsShowDialog(false)}
-        title={title}
-        content={content}
-      />
     </View>
   );
 };
