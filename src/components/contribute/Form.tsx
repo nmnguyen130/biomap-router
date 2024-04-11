@@ -20,13 +20,15 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
   const { selectedType } = useCreatureType();
   const { user } = useAuth();
 
-  const { show } = useModal();
+  const { show, dataList } = useModal();
 
   const scientificName = useRef("");
   const name = useRef("");
   const characteristic = useRef("");
   const behavior = useRef("");
   const habitat = useRef("");
+
+  const provincesText = dataList.map((item) => item).join(", ");
 
   const options = { timeZone: "Asia/Ho_Chi_Minh", hour12: false };
 
@@ -49,6 +51,7 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
       characteristic: characteristic.current,
       behavior: behavior.current,
       habitat: habitat.current,
+      provinces: dataList,
       imageUrl: imageUrl as unknown as string,
       type: selectedType,
       submissionDate: today,
@@ -118,6 +121,7 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
         >
           <TextInput
             multiline
+            value={provincesText}
             editable={false}
             className="w-11/12 text-gray-800"
             placeholder="Tỉnh"

@@ -13,7 +13,7 @@ const NewContributeForm = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>("");
 
-  const { displayMode, isOpen, modalContent, hide } = useModal();
+  const { displayMode, isOpen, modalContent, hide, dataList } = useModal();
 
   const uploadImage = async (mode: string) => {
     try {
@@ -110,7 +110,11 @@ const NewContributeForm = () => {
             content={modalContent.content}
           />
         ) : (
-          <CheckList isVisible={isOpen} onClose={hide} />
+          <CheckList
+            isVisible={isOpen}
+            onClose={hide}
+            provincesList={dataList}
+          />
         ))}
     </SafeAreaView>
   );

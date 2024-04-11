@@ -44,45 +44,50 @@ const Dialog: React.FC<Props> = ({
 }) => {
   const selectedMessage = messageMap[dialogType];
 
-  if (isVisible)
-    return (
-      <>
-        {
-          <View
-            style={[
-              StyleSheet.absoluteFillObject,
-              {
-                backgroundColor: "rgba(0, 0, 0, 0.4)",
-              },
-            ]}
+  const handleClose = () => {
+    onClose();
+  };
+
+  if (!isVisible) return;
+
+  return (
+    <>
+      {
+        <View
+          style={[
+            StyleSheet.absoluteFillObject,
+            {
+              backgroundColor: "rgba(0, 0, 0, 0.4)",
+            },
+          ]}
+        />
+      }
+      <Modal transparent animationType="fade" visible={isVisible}>
+        <View
+          className="flex-1 justify-around items-center bg-white p-3 mx-5 my-80 rounded-3xl"
+          style={{ borderColor: selectedMessage.color }}
+        >
+          <View className="w-24 h-24 bg-white rounded-full absolute -top-14" />
+          <MaterialCommunityIcons
+            name={selectedMessage.icon as any}
+            size={120}
+            color={selectedMessage.color}
+            style={{ position: "absolute", top: -62 }}
           />
-        }
-        <Modal transparent animationType="fade" visible={isVisible}>
-          <View
-            className="flex-1 justify-around items-center bg-white p-3 mx-5 my-80 rounded-3xl"
+          <Text className="font-bold text-3xl mt-12">{title}</Text>
+          <Text className="font-semibold">{content}</Text>
+
+          <TouchableOpacity
+            onPress={handleClose}
+            className="drop-shadow-2xl bg-white border rounded-2xl py-2 w-10/12"
             style={{ borderColor: selectedMessage.color }}
           >
-            <View className="w-24 h-24 bg-white rounded-full absolute -top-14" />
-            <MaterialCommunityIcons
-              name={selectedMessage.icon as any}
-              size={120}
-              color={selectedMessage.color}
-              style={{ position: "absolute", top: -62 }}
-            />
-            <Text className="font-bold text-3xl mt-12">{title}</Text>
-            <Text className="font-semibold">{content}</Text>
-
-            <TouchableOpacity
-              onPress={onClose}
-              className="drop-shadow-2xl bg-white border rounded-2xl py-2 w-10/12"
-              style={{ borderColor: selectedMessage.color }}
-            >
-              <Text className="font-bold text-lg text-center">Đã hiểu</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
-      </>
-    );
+            <Text className="font-bold text-lg text-center">Đã hiểu</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </>
+  );
 };
 
 export default Dialog;

@@ -18,12 +18,14 @@ const ModalContext = createContext<{
   modalContent: ModalContent;
   show(mode: DisplayMode, content?: ModalContent): void;
   hide(): void;
+  dataList: string[];
 }>({
   displayMode: DisplayMode.Dialog,
   isOpen: false,
   modalContent: { dialogType: MessageType.Success },
   show: () => {},
   hide: () => {},
+  dataList: [],
 });
 
 const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -32,6 +34,7 @@ const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [modalContent, setModalContent] = useState<ModalContent>({
     dialogType: MessageType.Success,
   });
+  const [dataList, setDataList] = useState<string[]>([]);
 
   const showModal = (mode: DisplayMode, content?: ModalContent) => {
     setDisplayMode(mode);
@@ -42,8 +45,11 @@ const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setIsOpen(true);
   };
 
-  const hideModal = () => {
+  const hideModal = (data?: string[]) => {
     setIsOpen(false);
+    if (data) {
+      setDataList(data);
+    }
   };
 
   const value = {
@@ -52,6 +58,7 @@ const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     modalContent,
     show: showModal,
     hide: hideModal,
+    dataList,
   };
 
   return (

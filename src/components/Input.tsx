@@ -4,7 +4,7 @@ import { View, TextInput } from "react-native";
 interface Props {
   leftIcon: ReactNode;
   placeholder: string;
-  onChangeText: (value: string) => string;
+  onChangeText: (value: string) => string | void;
   secureTextEntry?: boolean;
   rightIcon?: ReactNode;
 }
