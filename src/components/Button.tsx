@@ -5,6 +5,7 @@ interface Props {
   isSelected?: boolean;
   width?: "half" | "full";
   value: string;
+  disabled?: boolean;
 }
 
 const Button: React.FC<Props> = ({
@@ -12,16 +13,19 @@ const Button: React.FC<Props> = ({
   onPress,
   isSelected = true,
   value,
+  disabled = false,
 }) => {
   const buttonWidth = width === "full" ? "w-full p-4 mt-4" : "w-1/2 p-4";
+  const opacity = disabled ? "opacity-85" : "";
 
   return (
     <TouchableOpacity
       className={`
     ${isSelected ? "bg-lighter_primary" : "bg-white"}
-    ${buttonWidth} rounded-3xl items-center justify-center
+    ${buttonWidth} ${opacity} rounded-3xl items-center justify-center
   `}
       onPress={() => onPress()}
+      disabled={disabled}
     >
       <Text
         className={`

@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { getDocs, query, where } from "@firebase/firestore";
+import { DocumentData } from "@firebase/firestore";
+
 import { useAuth } from "@/hooks/AuthContext";
-import { formRef } from "@/utils/firebase";
+import { getFormsData } from "@/api/FormApi";
 
 const contributedData = [
   { scienceName: "Ursus thibetanus" },
@@ -21,28 +22,32 @@ const contributedData = [
 
 const ContributedList = () => {
   const { user } = useAuth();
+  const [formsData, setFormsData] = useState<DocumentData[]>([]);
 
-  // const getAllOfContribution = async () => {
-  //   const q = query(formRef, where("userId", "==", user?.userId));
-  //   const snapshot = await getDocs(q);
-  //   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  // };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getFormsData(user?.userId as string);
+        setFormsData(data);
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+      }
+    };
 
-  // useEffect(() => {
-  //   console.log(getAllOfContribution());
-  // }, []);
+    fetchData();
+  }, []);
 
   return (
     <View className="h-5/6 m-2">
       <FlatList
-        data={contributedData}
+        data={formsData}
         renderItem={({ item }) => (
           <>
             <View className="border-2 border-lighter_primary rounded-2xl ms-4 me-9 my-2.5">
               <View className="p-3.5">
-                <Text className="text-lg font-medium">{item.scienceName}</Text>
+                <Text className="text-lg font-medium">{item.name}</Text>
                 <Text className="text-gray-400 text-xs">
-                  Posted 64 minutes ago
+                  Posted: {item.submissionDate}
                 </Text>
               </View>
             </View>

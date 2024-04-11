@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { View, TouchableOpacity, TextInput } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -19,6 +19,7 @@ interface Props {
 const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
   const { selectedType } = useCreatureType();
   const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { show, dataList } = useModal();
 
@@ -42,6 +43,7 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
       return;
     }
 
+    setIsLoading(true);
     const today = new Date().toLocaleString("en-US", options);
 
     const data = {
@@ -60,6 +62,7 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
 
     const response = await addFormData(data);
 
+    setIsLoading(false);
     if (response.success) {
       router.replace("(tabs)/contribute");
     }
@@ -148,7 +151,11 @@ const Form: React.FC<Props> = ({ openModal, imageUrl }) => {
         </TouchableOpacity>
 
         <View className="mx-2">
-          <Button onPress={handlerSend} value="Gửi" />
+          <Button
+            onPress={handlerSend}
+            value={isLoading ? "Đang gửi..." : "Gửi"}
+            disabled={isLoading}
+          />
         </View>
       </View>
     </View>

@@ -1,5 +1,5 @@
 import { formRef, storage } from "@/utils/firebase";
-import { addDoc, updateDoc } from "@firebase/firestore";
+import { addDoc, getDocs, query, updateDoc, where } from "@firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 const tableName = "Forms";
@@ -16,6 +16,33 @@ interface FormData {
   submissionDate: string;
   status: string;
 }
+
+export const getNumberFormWithStatus = async (status?: string) => {
+  try {
+    const q = status
+      ? query(formRef, where("status", "==", status))
+      : query(formRef);
+    const snapshot = await getDocs(q);
+
+    const number = snapshot.docs.length;
+    return number;
+  } catch (error) {
+    console.log((error as Error).message);
+  }
+};
+
+export const getFormsData = async (userId: string) => {
+  try {
+    const q = query(formRef, where("userId", "==", userId));
+    const snapshot = await getDocs(q);
+
+    const forms = snapshot.docs.map((doc) => doc.data());
+    return forms;
+  } catch (error) {
+    console.log((error as Error).message);
+    return [];
+  }
+};
 
 export const addFormData = async (data: FormData) => {
   try {

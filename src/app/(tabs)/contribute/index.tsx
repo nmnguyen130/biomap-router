@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -6,8 +6,27 @@ import { router } from "expo-router";
 
 import { ContributedList } from "@/components/contribute";
 import Colors from "@/utils/Colors";
+import { getNumberFormWithStatus } from "@/api/FormApi";
 
 const UserContributed = () => {
+  const [counts, setCounts] = useState({ total: 0, approved: 0, pending: 0 });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setCounts({
+          total: (await getNumberFormWithStatus()) as number,
+          approved: (await getNumberFormWithStatus("approved")) as number,
+          pending: (await getNumberFormWithStatus("pending")) as number,
+        });
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 8 }}
@@ -23,14 +42,14 @@ const UserContributed = () => {
       </View>
 
       <View className="flex-row justify-around mx-2.5 my-0.5">
-        <View className="flex-row w-max justify-around items-center border border-blue-500 rounded-lg px-1 pe-3">
+        <View className="flex-row w-max justify-around items-center border border-blue-500 rounded-lg px-1">
           <MaterialCommunityIcons
             className="px-1"
             name="upload"
             size={24}
             color={Colors.blue}
           />
-          <Text className="text-blue-500">Tổng: 30</Text>
+          <Text className="text-blue-500 pe-3">Tổng: {counts.total}</Text>
         </View>
 
         <View className="flex-row w-1/4 justify-around items-center border border-lighter_primary rounded-lg p-3">
@@ -39,7 +58,7 @@ const UserContributed = () => {
             size={24}
             color={Colors.lighter_primary}
           />
-          <Text className="text-lighter_primary">20</Text>
+          <Text className="text-lighter_primary">{counts.approved}</Text>
         </View>
 
         <View className="flex-row w-1/4 justify-around items-center border border-yellow-500 rounded-lg p-3">
@@ -48,7 +67,7 @@ const UserContributed = () => {
             size={24}
             color={Colors.orange}
           />
-          <Text className="text-yellow-500">10</Text>
+          <Text className="text-yellow-500">{counts.pending}</Text>
         </View>
       </View>
 
